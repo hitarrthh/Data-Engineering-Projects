@@ -70,7 +70,7 @@ The Silver layer serves as the "Curated" zone. Data is pulled from the Bronze st
 4. Execute the `silver.load_silver` procedure to transform and load Silver data.
 5. Deploy Gold views using `gold_all.sql` to enable analytics.
 ---
-# 2 .EDA Project
+# 2. EDA Project
 
 This project focuses on **Exploratory Data Analysis (EDA)** and business intelligence auditing using the Gold layer of the data warehouse. It aims to uncover patterns, validate data integrity, and identify top-performing entities across the sales, product, and customer dimensions.
 
@@ -132,3 +132,60 @@ The analysis phase interacts with the final tier of the Medallion architecture:
 2.  **General Exploration**: Run `dimension_exploration.sql` and `date_exploration.sql` to understand data distributions.
 3.  **KPI Baseline**: Run `measures_exploration.sql` to establish core business metrics.
 4.  **Deep Dive**: Run `magnitude_analysis.sql` and `ranking_analysis.sql` for actionable business insights.
+---
+# 3. Advanced Data Analytics
+
+This project marks the final analytical phase, focusing on **Advanced Data Analytics** and **Business Reporting**. It utilizes the Gold layer to perform complex time-series analysis, customer segmentation, and the creation of comprehensive performance reports.
+
+---
+
+## 1. Project Architecture
+The advanced analytics phase serves as the intelligence layer, providing deep insights for strategic decision-making:
+* **Gold Layer**: Serves as the high-integrity data source for complex window functions, CTEs (Common Table Expressions), and final reporting views.
+
+
+---
+
+## 2. Analytical Components
+
+### 📈 Time-Series & Trend Analysis
+* **Purpose**: To understand business momentum and growth patterns over time. * **Logic**: 
+    * **Cumulative Analysis**: Calculates running totals and moving averages for sales to smooth out seasonal fluctuations.
+    * **Change Over Time**: Aggregates monthly metrics for total sales, unique customer counts, and total quantity sold.
+    * **Performance Trends**: Compares yearly product sales against the lifetime average and the previous year's performance (Year-over-Year analysis).
+
+### 🎯 Data Segmentation & Behavioral Analysis
+* **Purpose**: To categorize customers and products into actionable cohorts.
+* **Logic**:
+    * **Customer Segmentation**: Classifies customers into categories such as **VIP**, **Regular**, or **New** based on their total spend and relationship lifespan.
+    * **Product Segmentation**: Segments the inventory based on cost ranges (e.g., Below 100, 100-500) to understand catalog distribution.
+    * **Part-to-Whole Analysis**: Calculates the percentage contribution of each product category to the overall business revenue.
+
+### 📜 Strategic Reporting Views
+* **Purpose**: To provide consolidated, one-stop views for stakeholder reporting.
+* **Logic**:
+    * **Customer Report (`gold.report_customers`)**: Merges demographics with behavioral KPIs like Average Order Value (AOV), recency, and monthly spend.
+    * **Product Report (`gold.report_products`)**: Aggregates product-level metrics including total customers per product, monthly revenue, and performance tiering (High/Medium/Low Performer).
+
+---
+
+## 3. SQL File Inventory (Advanced Analytics)
+
+| Category | File Name | Description |
+| :--- | :--- | :--- |
+| **Trend** | `change_over_time_analysis.sql` | Tracks monthly shifts in sales, customer base, and volume. |
+| **Trend** | `cumulative_analysis.sql` | Calculates rolling totals and moving averages for revenue. |
+| **Performance** | `performance_analysis.sql` | Conducts Year-over-Year (YoY) comparisons and average benchmarking. |
+| **Segmentation**| `data_segmentation.sql` | Segments products based on cost ranges. |
+| **Segmentation**| `data_segmentation_2.sql` | Groups customers by loyalty and spending power. |
+| **Analysis** | `part_to_whole_analysis.sql` | Measures category-level contribution to total sales percentage. |
+| **Reporting** | `report_customers.sql` | Final view consolidating customer KPIs and age-group segmentation. |
+| **Reporting** | `report_products.sql` | Final view consolidating product performance, lifespan, and recency. |
+
+---
+
+## 4. Execution Order
+1.  **Metric Baselining**: Run `change_over_time_analysis.sql` and `cumulative_analysis.sql` for initial trends.
+2.  **Comparative Analysis**: Execute `performance_analysis.sql` to identify growth or decline.
+3.  **Customer Profiling**: Run `data_segmentation_2.sql` to identify high-value cohorts.
+4.  **Final Deployment**: Execute `report_customers.sql` and `report_products.sql` to create permanent reporting views in the Gold layer.
