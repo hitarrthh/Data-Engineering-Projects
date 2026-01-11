@@ -1,4 +1,4 @@
-# Data Warehouse Project: Medallion Architecture
+# 1. Data Warehouse Project: Medallion Architecture
 
 This project implements a three-tier data warehousing solution (Bronze, Silver, Gold) using SQL Server to transform raw CRM and ERP data into an analytical Star Schema.
 
@@ -69,3 +69,66 @@ The Silver layer serves as the "Curated" zone. Data is pulled from the Bronze st
 3. Run `table_silver.sql` to establish the cleansed schema.
 4. Execute the `silver.load_silver` procedure to transform and load Silver data.
 5. Deploy Gold views using `gold_all.sql` to enable analytics.
+---
+# 2 .EDA Project
+
+This project focuses on **Exploratory Data Analysis (EDA)** and business intelligence auditing using the Gold layer of the data warehouse. It aims to uncover patterns, validate data integrity, and identify top-performing entities across the sales, product, and customer dimensions.
+
+---
+
+## 1. Project Architecture
+The analysis phase interacts with the final tier of the Medallion architecture:
+* **Gold Layer**: Business-ready Dimensions and Fact tables used as the primary source for all analytical queries.
+
+
+
+---
+
+## 2. Analysis Stages
+
+### 🔍 Database & Metadata Exploration
+* **Purpose**: To audit the structural integrity of the warehouse.
+* **Logic**: 
+    * Retrieves a comprehensive list of all tables and schemas within the database.
+    * Inspects specific column details, including data types and nullability, for key tables like `dim_customers`.
+
+### 🌐 Dimension & Date Exploration
+* **Purpose**: To understand the categorical boundaries and temporal scope of the data.
+* **Logic**:
+    * Identifies unique geographic footprints (countries) and product hierarchies (categories and subcategories).
+    * Calculates the business timespan by finding the delta between the first and last order dates.
+    * Analyzes customer demographics, specifically identifying the age of the youngest and oldest customers.
+
+### 📈 Measures & Magnitude Analysis
+* **Purpose**: To quantify business performance through various aggregations.
+* **Logic**:
+    * **KPI Tracking**: Consolidates metrics such as Total Sales, Total Orders, Items Sold, and Average Price using `UNION ALL`.
+    * **Distribution Analysis**: Groups data to find customer concentrations by country and gender, and product volume by category.
+    * **Financial Performance**: Calculates total revenue generated per category and per individual customer.
+
+### 🏆 Ranking & Advanced Analytics
+* **Purpose**: To identify outliers and high-value targets.
+* **Logic**:
+    * **Window Functions**: Employs `DENSE_RANK()` to rank products and customers by revenue without gaps in ranking.
+    * **Performance Extremes**: Identifies the "Top 5" and "Worst 5" products based on revenue to guide inventory decisions.
+
+---
+
+## 3. SQL File Inventory (EDA)
+
+| Category | File Name | Description |
+| :--- | :--- | :--- |
+| **Metadata** | `database_exploration.sql` | Audits the database structure, tables, and column properties. |
+| **Exploration** | `dimension_exploration.sql` | Explores unique values in the country, category, and product hierarchies. |
+| **Exploration** | `date_exploration.sql` | Analyzes order timespans and customer age distributions. |
+| **Metrics** | `measures_exploration.sql` | Aggregates high-level business KPIs such as total sales and customer counts. |
+| **Analysis** | `magnitude_analysis.sql` | Performs distribution analysis using `GROUP BY` across various dimensions. |
+| **Ranking** | `ranking_analysis.sql` | Uses ranking functions to find top-performing products and customers. |
+
+---
+
+## 4. Execution Order
+1.  **Metadata Audit**: Run `database_exploration.sql` to verify the environment.
+2.  **General Exploration**: Run `dimension_exploration.sql` and `date_exploration.sql` to understand data distributions.
+3.  **KPI Baseline**: Run `measures_exploration.sql` to establish core business metrics.
+4.  **Deep Dive**: Run `magnitude_analysis.sql` and `ranking_analysis.sql` for actionable business insights.
